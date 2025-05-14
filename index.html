@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PREP MASTER</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      background: #e6f0ff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      color: #007bff;
+    }
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .actions {
+      margin-top: 20px;
+    }
+    .actions button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .actions button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    .dashboard-buttons button {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 25px;
+      margin-right: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .dashboard-buttons button:hover {
+      background-color: #0056b3;
+    }
+    #admin_dashboard, #worker_dashboard, #linelisting, #followup, #appointment, #whatsapp_reminder, #graph, #setting, #add_worker {
+      display: none;
+    }
+
+    /* Style for the back to dashboard button */
+    .back-to-dashboard {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .back-to-dashboard:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Page -->
+  <div class="login-box">
+    <h2>PREP MASTER</h2>
+    <div class="form-group">
+      <label for="role">Log Masuk Sebagai:</label>
+      <select id="role">
+        <option value="">-- Pilih Peranan --</option>
+        <option value="admin">Admin</option>
+        <option value="worker">Worker</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password">
+    </div>
+    <div id="error" class="error"></div>
+    <button onclick="login()">Log Masuk</button>
+  </div>
+
+  <script>
+    function login() {
+      const role = document.getElementById("role").value;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const error = document.getElementById("error");
+
+      if (!role || !username || !password) {
+        error.textContent = "Sila isi semua maklumat untuk log masuk.";
+        return;
+      }
+
+      // Simulasi login: akan diganti dengan sistem sebenar
+      if (role === "admin") {
+        document.getElementById("admin_dashboard").style.display = "block";
+        document.getElementById("worker_dashboard").style.display = "none";
+        document.querySelector(".login-box").style.display = "none";
+      } else if (role === "worker") {
+        document.getElementById("worker_dashboard").style.display = "block";
+        document.getElementById("admin_dashboard").style.display = "none";
+        document.querySelector(".login-box").style.display = "none";
+      } else {
+        error.textContent = "Peranan tidak sah.";
+      }
+    }
+  </script>
+
+  <!-- Admin Dashboard -->
+  <div id="admin_dashboard">
+    <h2>Admin Dashboard</h2>
+    <div class="dashboard-buttons">
+      <button onclick="showPage('linelisting')">Line Listing</button>
+      <button onclick="showPage('followup')">Follow Up</button>
+      <button onclick="showPage('appointment')">Appointment</button>
+      <button onclick="showPage('whatsapp_reminder')">WhatsApp Reminder</button>
+      <button onclick="showPage('graph')">Graph</button>
+      <button onclick="showPage('setting')">Setting</button>
+      <button onclick="showPage('add_worker')">Tambah Maklumat Pekerja</button>
+    </div>
+  </div>
+
+  <!-- Worker Dashboard -->
+  <div id="worker_dashboard">
+    <h2>Worker Dashboard</h2>
+    <div class="dashboard-buttons">
+      <button onclick="showPage('linelisting')">Line Listing</button>
+      <button onclick="showPage('followup')">Follow Up</button>
+      <button onclick="showPage('appointment')">Appointment</button>
+      <button onclick="showPage('whatsapp_reminder')">WhatsApp Reminder</button>
+      <button onclick="showPage('graph')">Graph</button>
+      <button onclick="showPage('setting')">Setting</button>
+    </div>
+  </div>
+
+  <!-- Line Listing -->
+  <div id="linelisting">
+    <h2>Line Listing</h2>
+    
+    <!-- Kembali ke Dashboard Button -->
+    <button class="back-to-dashboard" onclick="goToDashboard()"><i class="fas fa-arrow-left"></i></button>
+    
+    <div class="form-container">
+      <div class="form-group">
+        <label>Nama:</label>
+        <input type="text" id="nama">
+      </div>
+      <div class="form-group">
+        <label>NRIC:</label>
+        <input type="text" id="nric">
+      </div>
+      <div class="form-group">
+        <label>No. RN:</label>
+        <input type="text" id="rn">
+      </div>
+      <div class="form-group">
+        <label>No. Telefon:</label>
+        <input type="text" id="telefon">
+      </div>
+      <div class="form-group">
+        <label>Rujukan:</label>
+        <input type="text" id="rujukan">
+      </div>
+      <div class="form-group">
+        <label>Remark Status Klien:</label>
+        <input type="text" id="status">
+      </div>
+      <div class="form-group">
+        <label>Tarikh Kebenaran:</label>
+        <input type="date" id="tarikh_kebenaran">
+      </div>
+      <div class="form-group">
+        <label>Tarikh Pertama Hadir ke Klinik:</label>
+        <input type="date" id="tarikh_hadir">
+      </div>
+      <div class="form-group">
+        <label>M Enrollment:</label>
+        <input type="text" id="enrollment">
+      </div>
+      <div class="actions">
+        <button onclick="registerData()">Register New</button>
+        <button onclick="updateData()">Update</button>
+        <button onclick="searchData()">Search</button>
+      </div>
+    </div>
+
+    <h3>Senarai Klien</h3>
+    <table id="clientList">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>NRIC</th>
+          <th>No RN</th>
+          <th>No Telefon</th>
+          <th>Rujukan</th>
+          <th>Status Klien</th>
+          <th>Tarikh Kebenaran</th>
+          <th>Tarikh Hadir</th>
+          <th>M Enrollment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data akan ditambah di sini -->
+      </tbody>
+    </table>
+
+    <script>
+      function registerData() {
+        const tbody = document.querySelector('#clientList tbody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${document.getElementById('nama').value}</td>
+          <td>${document.getElementById('nric').value}</td>
+          <td>${document.getElementById('rn').value}</td>
+          <td>${document.getElementById('telefon').value}</td>
+          <td>${document.getElementById('rujukan').value}</td>
+          <td>${document.getElementById('status').value}</td>
+          <td>${document.getElementById('tarikh_kebenaran').value}</td>
+          <td>${document.getElementById('tarikh_hadir').value}</td>
+          <td>${document.getElementById('enrollment').value}</td>
+        `;
+        tbody.appendChild(row);
+      }
+
+      function updateData() {
+        alert('Fungsi kemas kini masih dalam pembangunan.');
+      }
+
+      function searchData() {
+        alert('Fungsi carian masih dalam pembangunan.');
+      }
+
+      function goToDashboard() {
+        const role = document.getElementById("role").value;
+        if (role === "admin") {
+          document.getElementById("admin_dashboard").style.display = "block";
+        } else {
+          document.getElementById("worker_dashboard").style.display = "block";
+        }
+        document.getElementById("linelisting").style.display = "none";
+      }
+
+      function showPage(pageId) {
+        // Menyembunyikan semua bahagian
+        const pages = document.querySelectorAll('#admin_dashboard, #worker_dashboard, #linelisting, #followup, #appointment, #whatsapp_reminder, #graph, #setting, #add_worker');
+        pages.forEach(page => page.style.display = 'none');
+        
+        // Memaparkan halaman yang dipilih
+        document.getElementById(pageId).style.display = 'block';
+      }
+    </script>
+  </div>
+<div>
+<!-- Follow Up -->
+    <div id="followup">
+        <h2>Follow Up</h2>
+        
+        <!-- Kembali ke Dashboard Button -->
+        <button class="back-to-dashboard" onclick="goToDashboard()"><i class="fas fa-arrow-left"></i></button>
+        
+        <div class="form-container">
+    <div class="form-group">
+      <label>Month Ke-:</label>
+      <input type="number" id="month">
+    </div>
+    <div class="form-group">
+      <label>Tarikh Hadir ke Klinik:</label>
+      <input type="date" id="tarikhHadir">
+    </div>
+    <div class="form-group">
+      <label>Regime:</label>
+      <input type="text" id="regime">
+    </div>
+    <div class="form-group">
+      <label>Klien Patuh Kepada Rawatan:</label>
+      <select id="patuh">
+        <option value="YA">YA</option>
+        <option value="TIDAK">TIDAK</option>
+      </select>
+    </div>
+    <div class="actions">
+      <button onclick="registerFollowUp()">Register New</button>
+      <button onclick="updateFollowUp()">Update</button>
+      <button onclick="searchFollowUp()">Search</button>
+    </div>
+  </div>
+
+  <h3>Senarai Follow Up</h3>
+  <table id="followupList">
+    <thead>
+      <tr>
+        <th>Month Ke-</th>
+        <th>Tarikh Hadir</th>
+        <th>Regime</th>
+        <th>Patuh Rawatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data akan dimasukkan di sini -->
+    </tbody>
+  </table>
+
+  <script>
+    function registerFollowUp() {
+      const tbody = document.querySelector('#followupList tbody');
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${document.getElementById('month').value}</td>
+        <td>${document.getElementById('tarikhHadir').value}</td>
+        <td>${document.getElementById('regime').value}</td>
+        <td>${document.getElementById('patuh').value}</td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    function updateFollowUp() {
+      alert('Fungsi kemas kini masih dalam pembangunan.');
+    }
+
+    function searchFollowUp() {
+      alert('Fungsi carian masih dalam pembangunan.');
+    }
+    function goToDashboard() {
+        const role = document.getElementById("role").value;
+        if (role === "admin") {
+          document.getElementById("admin_dashboard").style.display = "block";
+        } else {
+          document.getElementById("worker_dashboard").style.display = "block";
+        }
+        document.getElementById("linelisting").style.display = "none";
+      }
+
+       function showPage(pageId) {
+        // Menyembunyikan semua bahagian
+        const pages = document.querySelectorAll('#admin_dashboard, #worker_dashboard, #linelisting, #followup, #appointment, #whatsapp_reminder, #graph, #setting, #add_worker');
+        pages.forEach(page => page.style.display = 'none');
+        
+        // Memaparkan halaman yang dipilih
+        document.getElementById(pageId).style.display = 'block';
+      }
+    </script>
+  </div>
+</div> 
+    <!-- Appointment -->
+    <div id="appointment">
+        <h2>Appointment</h2>
+        
+        <!-- Kembali ke Dashboard Button -->
+        <button class="back-to-dashboard" onclick="goToDashboard()"><i class="fas fa-arrow-left"></i></button>
+        
+         <h2>WhatsApp Reminder</h2>
+  <div class="form-container">
+    <div class="form-group">
+      <label>Tarikh Temujanji:</label>
+      <input type="date" id="reminderDate">
+    </div>
+    <div class="form-group">
+      <label>Slot Masa:</label>
+      <input type="time" id="reminderTime">
+    </div>
+    <div class="form-group">
+      <label>Nama Klien:</label>
+      <input type="text" id="clientName">
+    </div>
+    <div class="form-group">
+      <label>No Telefon:</label>
+      <input type="text" id="clientPhone">
+    </div>
+    <div class="actions">
+      <button onclick="sendReminder()">Send Reminder</button>
+    </div>
+  </div>
+
+  <h3>Senarai Reminder</h3>
+  <table id="reminderList">
+    <thead>
+      <tr>
+        <th>Tarikh</th>
+        <th>Slot Masa</th>
+        <th>Nama Klien</th>
+        <th>No Telefon</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Reminder akan dimasukkan di sini -->
+    </tbody>
+  </table>
+
+  <script>
+    function sendReminder() {
+      const date = document.getElementById('reminderDate').value;
+      const time = document.getElementById('reminderTime').value;
+      const name = document.getElementById('clientName').value;
+      const phone = document.getElementById('clientPhone').value;
+
+      const tbody = document.querySelector('#reminderList tbody');
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${date}</td>
+        <td>${time}</td>
+        <td>${name}</td>
+        <td>${phone}</td>
+      `;
+      tbody.appendChild(row);
+
+      const whatsappLink = `https://wa.me/6${phone}?text=Salam%20${encodeURIComponent(name)},%20ingatkan%20temujanji%20anda%20pada%20${date}%20jam%20${time}.%20Terima%20kasih.`;
+      window.open(whatsappLink, '_blank');
+    }
+  </script>
+    </div>
+<div>
+    <!-- Graph -->
+    <div id="graph">
+        <h2>Graph</h2>
+        
+        <!-- Kembali ke Dashboard Button -->
+        <button class="back-to-dashboard" onclick="goToDashboard()"><i class="fas fa-arrow-left"></i></button>
+
+  <label for="filter">Tapis Mengikut:</label>
+  <select id="filter" onchange="updateGraph()">
+    <option value="minggu">Mingguan</option>
+    <option value="bulan">Bulanan</option>
+    <option value="tahun">Tahunan</option>
+    <option value="purata_bulanan">Purata Bulanan</option>
+  </select>
+
+  <div class="chart-container">
+    <canvas id="attendanceChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    let chart;
+
+    const dataSamples = {
+      minggu: {
+        labels: ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"],
+        data: [12, 19, 3, 5]
+      },
+      bulan: {
+        labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun"],
+        data: [25, 30, 22, 27, 35, 40]
+      },
+      tahun: {
+        labels: ["2021", "2022", "2023", "2024"],
+        data: [100, 120, 150, 130]
+      },
+      purata_bulanan: {
+        labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun"],
+        data: [5, 6, 7, 5.5, 6.2, 7.1]
+      }
+    };
+
+    function updateGraph() {
+      const filter = document.getElementById('filter').value;
+      const dataset = dataSamples[filter];
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: dataset.labels,
+          datasets: [{
+            label: 'Jumlah Kehadiran',
+            data: dataset.data,
+            backgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    updateGraph();
+  </script>
+<div>
+<!-- Setting -->
+    <div id="setting">
+        <h2>Setting</h2>
+        
+        <!-- Kembali ke Dashboard Button -->
+        <button class="back-to-dashboard" onclick="goToDashboard()"><i class="fas fa-arrow-left"></i></button>
+  
+    <div class="container">
+    <div class="section">
+      <h3>Lupa Kata Laluan</h3>
+      <button onclick="alert('Fungsi ini masih dalam pembangunan.')">Reset Password</button>
+    </div>
+
+    <div class="section">
+      <h3>Log Keluar</h3>
+      <button onclick="signOut()">Sign Out</button>
+    </div>
+
+    <div class="section">
+      <h3>Ekstrak Data</h3>
+      <label for="extractType">Pilih jenis data untuk diekstrak:</label>
+      <select id="extractType">
+        <option value="linelisting">Line Listing</option>
+        <option value="followup">Follow Up</option>
+        <option value="appointment">Appointment</option>
+        <option value="graph">Graph</option>
+      </select>
+      <button onclick="extractData()">Muat Turun</button>
+    </div>
+  <script>
+    function signOut() {
+      alert("Anda telah log keluar.");
+      window.location.href = "login.html";
+    }
+
+    function extractData() {
+      const type = document.getElementById("extractType").value;
+      alert("Memuat turun data: " + type);
+      // Tambah fungsi sebenar di sini untuk eksport fail
+    }
+  </script>
+</body>
+
+<!-- Add Worker -->
+    <div id="add_worker">
+        <h2>Tambah Maklumat Pekerja</h2>
+        
+        <!-- Kembali ke Dashboard Button -->
+        <button class="back-to-dashboard" onclick="goToDashboard()"><i class="fas fa-arrow-left"></i></button>
+        
+        <body>
+  <h2>Tambah Maklumat Pekerja</h2>
+  <div class="form-container">
+    <div class="form-group">
+      <label>Nama:</label>
+      <input type="text" id="nama">
+    </div>
+    <div class="form-group">
+      <label>No. Telefon:</label>
+      <input type="text" id="telefon">
+    </div>
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="email" id="email">
+    </div>
+    <button onclick="generateCredentials()">Daftar Pekerja</button>
+
+    <div class="credentials" id="output" style="display: none;">
+      <p><strong>Username:</strong> <span id="username"></span></p>
+      <p><strong>Password:</strong> <span id="password"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function generateCredentials() {
+      const nama = document.getElementById("nama").value;
+      const telefon = document.getElementById("telefon").value;
+      const email = document.getElementById("email").value;
+
+      if (!nama || !telefon || !email) {
+        alert("Sila lengkapkan semua maklumat.");
+        return;
+      }
+
+      const username = email.split("@")[0];
+      const password = Math.random().toString(36).slice(-8);
+
+      document.getElementById("username").textContent = username;
+      document.getElementById("password").textContent = password;
+      document.getElementById("output").style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
+<!-- End of HTML -->
+<!-- End of HTML -->
